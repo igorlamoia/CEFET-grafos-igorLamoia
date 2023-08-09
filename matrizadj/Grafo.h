@@ -207,6 +207,18 @@ Grafo *Grafo::grafoTransposto()
 Grafo *Grafo::grafoNaoDirecionado()
 {
   Grafo *grafoND = new Grafo(this->numVertices);
+  for (int v = 0; v < this->numVertices; v++)
+    if (!this->listaAdjVazia(v))
+    {
+      Aresta *adj = this->primeiroListaAdj(v);
+      while (adj != NULL)
+      {
+        grafoND->insereAresta(adj->_v1(), adj->_v2(), adj->_peso());
+        grafoND->insereAresta(adj->_v2(), adj->_v1(), adj->_peso());
+        delete adj;
+        adj = this->proxAdj(v);
+      }
+    }
   // Ex5: Implementar o grafo não direcionado
   return grafoND;
 }
