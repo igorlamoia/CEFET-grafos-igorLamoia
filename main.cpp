@@ -56,18 +56,27 @@ int main(int argc, char **argv)
     // cout << endl
     //      << "Lista adjacentes:: " << endl; // "Antes de inserir:
 
-    cout << endl;
-    grafo->listaAdj(0);
-    cout << endl
-         << "Grau Vertice: " << grafo->grauVertice(0);
+    // cout << endl;
+    // grafo->listaAdj(0);
+    // cout << endl
+    //      << "Grau Vertice: " << grafo->grauVertice(0);
     // Ex6: Verificar se um grafo é completo.
     cout << endl;
     cout << endl;
-    grafo->completo() ? cout << "Grafo completo!" << endl : cout << "Grafo nao completo!";
+    grafo->completo() ? (cout << "Grafo completo!") : (cout << "Grafo nao completo!");
 
     // Ex7: Verificar se um grafo é regular.
     cout << endl;
-    grafo->regular() ? cout << "Grafo regular!" << endl : cout << "Grafo nao regular!" << endl;
+    grafo->regular() ? (cout << "Grafo regular!") : (cout << "Grafo nao regular!");
+
+    // Ex8: Verificar se um grafo é Euleriano (Grau par em todos os vertices)
+    cout << endl;
+    grafo->euleriano() ? (cout << "Grafo euleriano!") : (cout << "Grafo nao euleriano!");
+
+    // Ex9: Verificar SubEuleriano
+    cout << endl;
+    grafo->subEuleriano() ? (cout << "Grafo SubEuleriano!") : (cout << "Grafo nao SubEuleriano!");
+    cout << endl;
 }
 
 // Regular é todos os vertices tendo o mesmo grau

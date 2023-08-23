@@ -52,6 +52,8 @@ public:
   void listaAdj(int v);
   bool completo();
   bool regular();
+  bool euleriano();
+  bool subEuleriano();
   int grauVertice(int v);
   ~Grafo();
 };
@@ -298,40 +300,9 @@ bool Grafo::completo()
   // return true;
 }
 
-// bool Grafo::regular()
-// {
-//   int grau = 0;
-//   int grauAnterior = 0;
-//   for (int i = 0; i < this->numVertices; i++)
-//   {
-//     for (int j = 0; j < this->numVertices; j++)
-//     {
-//       if (i != j)
-//       {
-//         if (this->existeAresta(i, j))
-//         {
-//           grau++;
-//         }
-//       }
-//     }
-//     if (i == 0)
-//     {
-//       grauAnterior = grau;
-//     }
-//     else
-//     {
-//       if (grau != grauAnterior)
-//       {
-//         return false;
-//       }
-//     }
-//     grau = 0;
-//   }
-//   return true;
-// }
-
 bool Grafo::regular()
 {
+
   int grau = 0;
   int grauAnterior = this->grauVertice(0);
   for (int i = 1; i < this->numVertices; i++)
@@ -342,4 +313,27 @@ bool Grafo::regular()
     grauAnterior = grau;
   }
   return true;
+}
+
+// (Grau par em todos os vertices)
+bool Grafo::euleriano()
+{
+  for (int i = 0; i < this->numVertices; i++)
+  {
+    if (this->grauVertice(i) % 2 != 0)
+      return false;
+  }
+  return true;
+}
+
+// (Somente 2 impares) (Grau par em todos os vertices menos 2)
+bool Grafo::subEuleriano()
+{
+  int impares = 0;
+  for (int i = 0; i < this->numVertices; i++)
+  {
+    if (this->grauVertice(i) % 2 != 0)
+      impares++;
+  }
+  return impares == 2 ? true : false;
 }
