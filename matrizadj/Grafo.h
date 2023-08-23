@@ -38,6 +38,7 @@ public:
   Grafo(istream &in);
   Grafo(int numVertices, int numArestas);
   void insereAresta(int v1, int v2, int peso);
+  // void insereArestaPorReferencia(int v1, int v2, int peso);
   bool existeAresta(int v1, int v2) const;
   bool listaAdjVazia(int v) const;
   Aresta *lerAresta();
@@ -48,6 +49,10 @@ public:
   int _numVertices() const;
   Grafo *grafoTransposto();
   Grafo *grafoNaoDirecionado();
+  void listaAdj(int v);
+  bool completo();
+  bool regular();
+  int grauVertice(int v);
   ~Grafo();
 };
 
@@ -109,6 +114,11 @@ void Grafo::insereAresta(int v1, int v2, int peso)
 {
   this->mat[v1][v2] = peso;
 }
+// receaving an Aresta object
+// void insereArestaPorReferencia(Aresta *a)
+// {
+//   this->mat[a->_v1()][a->_v2()] = a->_peso();
+// }
 bool Grafo::existeAresta(int v1, int v2) const
 {
   return (this->mat[v1][v2] > 0);
@@ -229,4 +239,107 @@ Grafo::~Grafo()
     delete[] this->mat[i];
   delete[] this->mat;
   delete[] this->pos;
+}
+
+void Grafo::listaAdj(int v)
+{
+  for (int j = 0; j < this->numVertices; j++)
+  {
+    // if (this->mat[v][j] > 0)
+    if (this->existeAresta(v, j))
+      cout << j << " ";
+  }
+  //  funciona também
+  // if (!this->listaAdjVazia(v))
+  // {
+  //   Aresta *adj = this->primeiroListaAdj(v);
+  //   while (adj != NULL)
+  //   {
+  //     cout << adj->_v2() << " ";
+  //     delete adj;
+  //     adj = this->proxAdj(v);
+  //   }
+  // }
+}
+
+int Grafo::grauVertice(int v)
+{
+  int grau = 0;
+  for (int j = 0; j < this->numVertices; j++)
+  {
+    if (this->existeAresta(v, j))
+      grau++;
+  }
+  return grau;
+}
+
+bool Grafo::completo()
+{
+  // n - 1
+  for (int i = 0; i < this->numVertices; i++)
+  {
+    if (this->grauVertice(i) < this->numVertices - 1)
+      return false;
+  }
+  return true;
+  // for (int i = 0; i < this->numVertices; i++)
+  // {
+  //   for (int j = 0; j < this->numVertices; j++)
+  //   {
+  //     if (i != j)
+  //     {
+  //       if (!this->existeAresta(i, j))
+  //       {
+  //         return false;
+  //       }
+  //     }
+  //   }
+  // }
+  // return true;
+}
+
+// bool Grafo::regular()
+// {
+//   int grau = 0;
+//   int grauAnterior = 0;
+//   for (int i = 0; i < this->numVertices; i++)
+//   {
+//     for (int j = 0; j < this->numVertices; j++)
+//     {
+//       if (i != j)
+//       {
+//         if (this->existeAresta(i, j))
+//         {
+//           grau++;
+//         }
+//       }
+//     }
+//     if (i == 0)
+//     {
+//       grauAnterior = grau;
+//     }
+//     else
+//     {
+//       if (grau != grauAnterior)
+//       {
+//         return false;
+//       }
+//     }
+//     grau = 0;
+//   }
+//   return true;
+// }
+
+bool Grafo::regular()
+{
+  int grau = 0;
+  int grauAnterior = this->grauVertice(0);
+  for (int i = 1; i < this->numVertices; i++)
+  {
+    grau = this->grauVertice(i);
+    if (grau != grauAnterior)
+      return false;
+    grauAnterior = grau;
+  }
+  return true;
 }
