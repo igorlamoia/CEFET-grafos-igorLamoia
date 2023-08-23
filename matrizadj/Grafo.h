@@ -40,6 +40,7 @@ public:
   void insereAresta(int v1, int v2, int peso);
   // void insereArestaPorReferencia(int v1, int v2, int peso);
   bool existeAresta(int v1, int v2) const;
+  bool grauAresta(int v1, int v2) const;
   bool listaAdjVazia(int v) const;
   Aresta *lerAresta();
   Aresta *primeiroListaAdj(int v);
@@ -54,6 +55,7 @@ public:
   bool regular();
   bool euleriano();
   bool subEuleriano();
+  bool naoDirecionado();
   int grauVertice(int v);
   ~Grafo();
 };
@@ -124,6 +126,10 @@ void Grafo::insereAresta(int v1, int v2, int peso)
 bool Grafo::existeAresta(int v1, int v2) const
 {
   return (this->mat[v1][v2] > 0);
+}
+bool Grafo::grauAresta(int v1, int v2) const
+{
+  return (this->mat[v1][v2]);
 }
 bool Grafo::listaAdjVazia(int v) const
 {
@@ -305,6 +311,7 @@ bool Grafo::regular()
 
   int grau = 0;
   int grauAnterior = this->grauVertice(0);
+  // poderia fazer um for somente com o grau zero kkkk, já q todos serão iguais, n preciso de anterior
   for (int i = 1; i < this->numVertices; i++)
   {
     grau = this->grauVertice(i);
@@ -336,4 +343,22 @@ bool Grafo::subEuleriano()
       impares++;
   }
   return impares == 2 ? true : false;
+}
+
+// Ex: (se existir loop (Ex: 0 -> 0) um vertice 0 -> 1 que não tenha 1 -> 0 ou que não tenham o mesmo grau
+bool Grafo::naoDirecionado()
+{
+  for (int i = 0; i < this->numVertices; i++)
+  {
+    for (int j = 0; j < this->numVertices; j++)
+    {
+      // Ex: um vertice 0 -> 1 que não tenha 1 -> 0 ou que não tenham o mesmo grau
+      if (this->grauAresta(i, j) != this->grauAresta(j, i))
+        return false;
+    }
+    // se existir loop (Ex: 0 <-> 0)
+    if (this->grauAresta(i, i))
+      return false;
+  }
+  return true;
 }

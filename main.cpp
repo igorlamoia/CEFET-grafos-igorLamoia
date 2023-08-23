@@ -63,6 +63,8 @@ int main(int argc, char **argv)
     // Ex6: Verificar se um grafo é completo.
     cout << endl;
     cout << endl;
+    if (!grafo->naoDirecionado())
+        return 0;
     grafo->completo() ? (cout << "Grafo completo!") : (cout << "Grafo nao completo!");
 
     // Ex7: Verificar se um grafo é regular.
@@ -83,3 +85,5 @@ int main(int argc, char **argv)
 // Completo é todos os vertices se ligarem (n-1) n sendo o número total de vertices
 // Euleriano (Grau par em todos os vertices)
 // SubEuleriano (Somente 2 impares) (Grau par em todos os vertices menos 2)
+
+// https://csacademy.com/app/graph_editor/
