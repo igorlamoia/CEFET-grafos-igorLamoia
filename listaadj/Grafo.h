@@ -84,7 +84,13 @@ public:
   void imprime() const;
   int _numVertices() const;
   Grafo *grafoTransposto();
+  void buscaEmProfundidade();
+  void visitaDfs(int u, int *cor, int *antecessor);
   ~Grafo();
+  // const para cor
+  static const int BRANCO = 0;
+  static const int CINZA = 1;
+  static const int PRETO = 2;
 };
 
 Grafo::Grafo(istream &in)
@@ -199,4 +205,42 @@ Grafo *Grafo::grafoTransposto()
 Grafo::~Grafo()
 {
   delete[] this->adj;
+}
+
+void Grafo::buscaEmProfundidade()
+{
+  int *cor = new int[this->numVertices];
+  int *antecessor = new int[this->numVertices];
+
+  for (int u = 0; u < this->numVertices; u++)
+  {
+    cor[u] = BRANCO;
+    antecessor[u] = -1;
+  }
+  for (int u = 0; u < this->numVertices; u++)
+    if (cor[u] == BRANCO)
+      this->visitaDfs(u, cor, antecessor);
+  delete[] cor;
+  delete[] antecessor;
+}
+
+void Grafo::visitaDfs(int u, int *cor, int *antecessor)
+{
+  cor[u] = CINZA;
+  if (!this->listaAdjVazia(u))
+  {
+    Aresta *adj = this->primeiroListaAdj(u);
+    while (adj != NULL)
+    {
+      int v = adj->_v2();
+      if (cor[v] == BRANCO)
+      {
+        antecessor[v] = u;
+        this->visitaDfs(v, cor, antecessor);
+      }
+      delete adj;
+      adj = this->proxAdj(u); // próxima aresta de u
+    }
+  }
+  cor[u] = PRETO;
 }
