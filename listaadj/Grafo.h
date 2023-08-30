@@ -86,6 +86,10 @@ public:
   Grafo *grafoTransposto();
   void buscaEmProfundidade();
   void visitaDfs(int u, int *cor, int *antecessor);
+  // todos usando o buscaEmProfundidade
+  // bool ciclico(); // tomar cuidado pra n pegar o mesmo vertice antecessor (antecessor e proximo cinza TODOS OS ADJACENTES)
+  // int numComponentes();
+  // Vector<int> ordemTopologica();
   ~Grafo();
   // const para cor
   static const int BRANCO = 0;
