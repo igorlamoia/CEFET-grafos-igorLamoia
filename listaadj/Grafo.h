@@ -227,6 +227,7 @@ void Grafo::buscaEmProfundidade()
 void Grafo::visitaDfs(int u, int *cor, int *antecessor)
 {
   cor[u] = CINZA;
+  cout << "cinza: " << u << endl;
   if (!this->listaAdjVazia(u))
   {
     Aresta *adj = this->primeiroListaAdj(u);
@@ -242,5 +243,7 @@ void Grafo::visitaDfs(int u, int *cor, int *antecessor)
       adj = this->proxAdj(u); // próxima aresta de u
     }
   }
+  cout << "preto: " << u << endl;
+
   cor[u] = PRETO;
 }

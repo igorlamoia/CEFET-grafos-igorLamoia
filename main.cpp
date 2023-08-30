@@ -1,15 +1,18 @@
-#include "matrizadj/Grafo.h"
-// #include "listaadj/Grafo.h"
+// #include "matrizadj/Grafo.h"
+#include "listaadj/Grafo.h"
 #include <fstream>
 using namespace std;
 
 int main(int argc, char **argv)
 {
-    ifstream in("input.txt");
+    // ifstream in("input.txt");
+    ifstream in("input-busca-profundidade.txt");
+
     cout << "Grafo: " << endl;
     Grafo *grafo = new Grafo(in);
     grafo->imprime();
 
+    grafo->buscaEmProfundidade();
     // Ex1: criar e imprimir grafo transposto.
     // cout << endl;
     // cout << "Grafo transposto: " << endl;
@@ -61,24 +64,24 @@ int main(int argc, char **argv)
     // cout << endl
     //      << "Grau Vertice: " << grafo->grauVertice(0);
     // Ex6: Verificar se um grafo é completo.
-    cout << endl;
-    cout << endl;
-    if (!grafo->naoDirecionado())
-        return 0;
-    grafo->completo() ? (cout << "Grafo completo!") : (cout << "Grafo nao completo!");
+    // cout << endl;
+    // cout << endl;
+    // if (!grafo->naoDirecionado())
+    //     return 0;
+    // grafo->completo() ? (cout << "Grafo completo!") : (cout << "Grafo nao completo!");
 
-    // Ex7: Verificar se um grafo é regular.
-    cout << endl;
-    grafo->regular() ? (cout << "Grafo regular!") : (cout << "Grafo nao regular!");
+    // // Ex7: Verificar se um grafo é regular.
+    // cout << endl;
+    // grafo->regular() ? (cout << "Grafo regular!") : (cout << "Grafo nao regular!");
 
-    // Ex8: Verificar se um grafo é Euleriano (Grau par em todos os vertices)
-    cout << endl;
-    grafo->euleriano() ? (cout << "Grafo euleriano!") : (cout << "Grafo nao euleriano!");
+    // // Ex8: Verificar se um grafo é Euleriano (Grau par em todos os vertices)
+    // cout << endl;
+    // grafo->euleriano() ? (cout << "Grafo euleriano!") : (cout << "Grafo nao euleriano!");
 
-    // Ex9: Verificar SubEuleriano
-    cout << endl;
-    grafo->subEuleriano() ? (cout << "Grafo SubEuleriano!") : (cout << "Grafo nao SubEuleriano!");
-    cout << endl;
+    // // Ex9: Verificar SubEuleriano
+    // cout << endl;
+    // grafo->subEuleriano() ? (cout << "Grafo SubEuleriano!") : (cout << "Grafo nao SubEuleriano!");
+    // cout << endl;
 }
 
 // Regular é todos os vertices tendo o mesmo grau
