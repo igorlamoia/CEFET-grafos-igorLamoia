@@ -87,9 +87,11 @@ public:
   void buscaEmProfundidade();
   void visitaDfs(int u, int *cor, int *antecessor);
   // todos usando o buscaEmProfundidade
-  // bool ciclico(); // tomar cuidado pra n pegar o mesmo vertice antecessor (antecessor e proximo cinza TODOS OS ADJACENTES)
-  // int numComponentes();
-  // Vector<int> ordemTopologica();
+  bool aciclico(); // tomar cuidado pra n pegar o mesmo vertice antecessor (antecessor e proximo cinza TODOS OS ADJACENTES)
+  bool visitaDfsCiclo(int u, int *cor, int *antecessor);
+  int numComponentes();
+  vector<int> ordemTopologica();
+  void visitaDfsComOrdem(int u, int *cor, int *antecessor, vector<int> &ordem);
   ~Grafo();
   // const para cor
   static const int BRANCO = 0;
@@ -231,7 +233,7 @@ void Grafo::buscaEmProfundidade()
 void Grafo::visitaDfs(int u, int *cor, int *antecessor)
 {
   cor[u] = CINZA;
-  cout << "cinza: " << u << endl;
+  // cout << "cinza: " << u << endl;
   if (!this->listaAdjVazia(u))
   {
     Aresta *adj = this->primeiroListaAdj(u);
@@ -247,7 +249,114 @@ void Grafo::visitaDfs(int u, int *cor, int *antecessor)
       adj = this->proxAdj(u); // próxima aresta de u
     }
   }
-  cout << "preto: " << u << endl;
+  // cout << "preto: " << u << endl;
 
   cor[u] = PRETO;
+}
+
+// verificar se grafo é aciclico
+bool Grafo::aciclico() // tomar cuidado pra n pegar o mesmo vertice antecessor (antecessor e proximo cinza TODOS OS ADJACENTES)
+{
+  int *cor = new int[this->numVertices];
+  int *antecessor = new int[this->numVertices];
+
+  for (int u = 0; u < this->numVertices; u++)
+  {
+    cor[u] = BRANCO;
+    antecessor[u] = -1;
+  }
+  for (int u = 0; u < this->numVertices; u++)
+    if (cor[u] == BRANCO)
+      this->visitaDfsCiclo(u, cor, antecessor);
+  delete[] cor;
+  delete[] antecessor;
+}
+
+bool Grafo::visitaDfsCiclo(int u, int *cor, int *antecessor)
+{
+  cor[u] = CINZA;
+  if (!this->listaAdjVazia(u))
+  {
+    Aresta *adj = this->primeiroListaAdj(u);
+    while (adj != NULL)
+    {
+      int v = adj->_v2();
+      if (cor[v] == CINZA)
+        return true;
+      if (cor[v] == BRANCO)
+      {
+        antecessor[v] = u;
+        this->visitaDfsCiclo(v, cor, antecessor);
+      }
+      delete adj;
+      adj = this->proxAdj(u); // próxima aresta de u
+    }
+  }
+  cor[u] = PRETO;
+}
+
+int Grafo::numComponentes()
+{
+  int *cor = new int[this->numVertices];
+  int *antecessor = new int[this->numVertices];
+  int numComponentes = 0;
+
+  for (int u = 0; u < this->numVertices; u++)
+  {
+    cor[u] = BRANCO;
+    antecessor[u] = -1;
+  }
+  for (int u = 0; u < this->numVertices; u++)
+  {
+    if (cor[u] == BRANCO)
+    {
+      numComponentes++;
+      this->visitaDfs(u, cor, antecessor);
+    }
+  }
+  delete[] cor;
+  delete[] antecessor;
+  return numComponentes;
+}
+
+vector<int> Grafo::ordemTopologica()
+{
+  vector<int> ordem;
+  int *cor = new int[this->numVertices];
+  int *antecessor = new int[this->numVertices];
+
+  for (int u = 0; u < this->numVertices; u++)
+  {
+    cor[u] = BRANCO;
+    antecessor[u] = -1;
+  }
+  for (int u = 0; u < this->numVertices; u++)
+    if (cor[u] == BRANCO)
+      this->visitaDfsComOrdem(u, cor, antecessor, ordem);
+  delete[] cor;
+  delete[] antecessor;
+  reverse(ordem.begin(), ordem.end()); // inverte o vetor para ficar na ordem correta de prioridade
+  return ordem;
+}
+void Grafo::visitaDfsComOrdem(int u, int *cor, int *antecessor, vector<int> &ordem)
+{
+  cor[u] = CINZA;
+  if (!this->listaAdjVazia(u))
+  {
+    Aresta *adj = this->primeiroListaAdj(u);
+    while (adj != NULL)
+    {
+      int v = adj->_v2();
+      if (cor[v] == BRANCO)
+      {
+        antecessor[v] = u;
+        this->visitaDfsComOrdem(v, cor, antecessor, ordem);
+      }
+      delete adj;
+      adj = this->proxAdj(u); // próxima aresta de u
+    }
+  }
+
+  cor[u] = PRETO;
+  ordem.push_back(u);
 }

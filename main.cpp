@@ -12,7 +12,15 @@ int main(int argc, char **argv)
     Grafo *grafo = new Grafo(in);
     grafo->imprime();
 
-    grafo->buscaEmProfundidade();
+    // grafo->buscaEmProfundidade();
+    grafo->aciclico() ? (cout << "Grafo aciclico!") : (cout << "Grafo nao aciclico!");
+    cout << endl;
+    cout << "Numero de componentes: " << grafo->numComponentes() << endl;
+    cout << "Ordem topologica: ";
+    vector<int> ordem = grafo->ordemTopologica();
+    for (int i = 0; i < ordem.size(); i++)
+        cout << ordem[i] << " ";
+    cout << endl;
     // Ex1: criar e imprimir grafo transposto.
     // cout << endl;
     // cout << "Grafo transposto: " << endl;
