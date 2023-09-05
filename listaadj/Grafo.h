@@ -94,7 +94,7 @@ public:
   void visitaDfsComOrdem(int u, int *cor, int *antecessor, vector<int> &ordem);
   // bfs
   void buscaEmLargura();
-  void visitaBfs(int u, int *cor, int *antecessor);
+  void visitaBfs(int u, int *cor, int *antecessor, vector<int> &distancia);
 
   ~Grafo();
   // const para cor
@@ -372,20 +372,26 @@ void Grafo::buscaEmLargura()
 {
   int *cor = new int[this->numVertices];
   int *antecessor = new int[this->numVertices];
+  vector<int> distancia;
 
   for (int u = 0; u < this->numVertices; u++)
   {
     cor[u] = BRANCO;
     antecessor[u] = -1;
+    distancia[u] = -1;
   }
   for (int u = 0; u < this->numVertices; u++)
     if (cor[u] == BRANCO)
-      this->visitaBfs(u, cor, antecessor);
+      this->visitaBfs(u, cor, antecessor, distancia);
   delete[] cor;
   delete[] antecessor;
+
+  // printa distancia
+  for (int i = 0; i < this->numVertices; i++)
+    cout << "Distancia de " << i << ": " << distancia[i] << endl;
 }
 
-void Grafo::visitaBfs(int u, int *cor, int *antecessor)
+void Grafo::visitaBfs(int u, int *cor, int *antecessor, vector<int> &distancia)
 {
   queue<int> fila;
   cor[u] = CINZA;
@@ -405,6 +411,7 @@ void Grafo::visitaBfs(int u, int *cor, int *antecessor)
           cor[v] = CINZA;
           cout << "Visitou: " << v << endl;
           antecessor[v] = u;
+          distancia[v] = distancia[u] + 1;
           fila.push(v);
         }
         delete adj;
