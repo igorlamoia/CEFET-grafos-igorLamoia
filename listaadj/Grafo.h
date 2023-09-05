@@ -92,6 +92,10 @@ public:
   int numComponentes();
   vector<int> ordemTopologica();
   void visitaDfsComOrdem(int u, int *cor, int *antecessor, vector<int> &ordem);
+  // bfs
+  void buscaEmLargura();
+  void visitaBfs(int u, int *cor, int *antecessor);
+
   ~Grafo();
   // const para cor
   static const int BRANCO = 0;
@@ -363,3 +367,52 @@ void Grafo::visitaDfsComOrdem(int u, int *cor, int *antecessor, vector<int> &ord
   cor[u] = PRETO;
   ordem.push_back(u);
 }
+
+void Grafo::buscaEmLargura()
+{
+  int *cor = new int[this->numVertices];
+  int *antecessor = new int[this->numVertices];
+
+  for (int u = 0; u < this->numVertices; u++)
+  {
+    cor[u] = BRANCO;
+    antecessor[u] = -1;
+  }
+  for (int u = 0; u < this->numVertices; u++)
+    if (cor[u] == BRANCO)
+      this->visitaBfs(u, cor, antecessor);
+  delete[] cor;
+  delete[] antecessor;
+}
+
+void Grafo::visitaBfs(int u, int *cor, int *antecessor)
+{
+  queue<int> fila;
+  cor[u] = CINZA;
+  fila.push(u);
+  while (!fila.empty())
+  {
+    int u = fila.front();
+    fila.pop();
+    if (!this->listaAdjVazia(u))
+    {
+      Aresta *adj = this->primeiroListaAdj(u);
+      while (adj != NULL)
+      {
+        int v = adj->_v2();
+        if (cor[v] == BRANCO)
+        {
+          cor[v] = CINZA;
+          cout << "Visitou: " << v << endl;
+          antecessor[v] = u;
+          fila.push(v);
+        }
+        delete adj;
+        adj = this->proxAdj(u); // próxima aresta de u
+      }
+    }
+    cor[u] = PRETO;
+  }
+}
+
+// create a struct to store the edge information

@@ -21,6 +21,10 @@ int main(int argc, char **argv)
     for (int i = 0; i < ordem.size(); i++)
         cout << ordem[i] << " ";
     cout << endl;
+
+    grafo->buscaEmLargura();
+    cout << endl;
+
     // Ex1: criar e imprimir grafo transposto.
     // cout << endl;
     // cout << "Grafo transposto: " << endl;
