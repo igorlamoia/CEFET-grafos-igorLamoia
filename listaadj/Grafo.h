@@ -260,6 +260,8 @@ bool Grafo::aciclico() // tomar cuidado pra n pegar o mesmo vertice antecessor (
   int *cor = new int[this->numVertices];
   int *antecessor = new int[this->numVertices];
 
+  bool aciclico = false;
+
   for (int u = 0; u < this->numVertices; u++)
   {
     cor[u] = BRANCO;
@@ -267,9 +269,10 @@ bool Grafo::aciclico() // tomar cuidado pra n pegar o mesmo vertice antecessor (
   }
   for (int u = 0; u < this->numVertices; u++)
     if (cor[u] == BRANCO)
-      this->visitaDfsCiclo(u, cor, antecessor);
+      aciclico = !this->visitaDfsCiclo(u, cor, antecessor);
   delete[] cor;
   delete[] antecessor;
+  return aciclico;
 }
 
 bool Grafo::visitaDfsCiclo(int u, int *cor, int *antecessor)
