@@ -94,7 +94,7 @@ public:
   void visitaDfsComOrdem(int u, int *cor, int *antecessor, vector<int> &ordem);
   // bfs
   void buscaEmLargura();
-  void visitaBfs(int u, int *cor, int *antecessor, vector<int> &distancia);
+  void visitaBfs(int u, int *cor, int *antecessor, int *distancia);
 
   ~Grafo();
   // const para cor
@@ -273,7 +273,11 @@ bool Grafo::aciclico() // tomar cuidado pra n pegar o mesmo vertice antecessor (
   }
   for (int u = 0; u < this->numVertices; u++)
     if (cor[u] == BRANCO)
+    {
       aciclico = !this->visitaDfsCiclo(u, cor, antecessor);
+      // if (aciclico)
+      //   return true;
+    }
   delete[] cor;
   delete[] antecessor;
   return aciclico;
@@ -372,7 +376,8 @@ void Grafo::buscaEmLargura()
 {
   int *cor = new int[this->numVertices];
   int *antecessor = new int[this->numVertices];
-  vector<int> distancia;
+  int *distancia = new int[this->numVertices];
+  // vector<int> distancia;
 
   for (int u = 0; u < this->numVertices; u++)
   {
@@ -387,11 +392,11 @@ void Grafo::buscaEmLargura()
   delete[] antecessor;
 
   // printa distancia
-  for (int i = 0; i < this->numVertices; i++)
-    cout << "Distancia de " << i << ": " << distancia[i] << endl;
+  // for (int i = 0; i < this->numVertices; i++)
+  //   cout << "Distancia de " << i << ": " << distancia[i] << endl;
 }
 
-void Grafo::visitaBfs(int u, int *cor, int *antecessor, vector<int> &distancia)
+void Grafo::visitaBfs(int u, int *cor, int *antecessor, int *distancia)
 {
   queue<int> fila;
   cor[u] = CINZA;
