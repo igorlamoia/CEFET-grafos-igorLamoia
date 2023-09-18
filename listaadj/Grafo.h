@@ -88,7 +88,7 @@ public:
   void visitaDfs(int u, int *cor, int *antecessor);
   // todos usando o buscaEmProfundidade
   bool aciclico(); // tomar cuidado pra n pegar o mesmo vertice antecessor (antecessor e proximo cinza TODOS OS ADJACENTES)
-  bool visitaDfsCiclo(int u, int *cor, int *antecessor);
+  bool visitaDfsCiclo(int u, int *cor);
   int numComponentes();
   vector<int> ordemTopologica();
   void visitaDfsComOrdem(int u, int *cor, int *antecessor, vector<int> &ordem);
@@ -259,51 +259,56 @@ void Grafo::visitaDfs(int u, int *cor, int *antecessor)
 }
 
 // verificar se grafo é aciclico
-bool Grafo::aciclico() // tomar cuidado pra n pegar o mesmo vertice antecessor (antecessor e proximo cinza TODOS OS ADJACENTES)
+bool Grafo::aciclico()
 {
   int *cor = new int[this->numVertices];
-  int *antecessor = new int[this->numVertices];
-
-  bool aciclico = false;
 
   for (int u = 0; u < this->numVertices; u++)
   {
     cor[u] = BRANCO;
-    antecessor[u] = -1;
   }
+
   for (int u = 0; u < this->numVertices; u++)
-    if (cor[u] == BRANCO)
+  {
+    if (cor[u] == BRANCO && visitaDfsCiclo(u, cor))
     {
-      aciclico = !this->visitaDfsCiclo(u, cor, antecessor);
-      // if (aciclico)
-      //   return true;
+      delete[] cor;
+      return false; // Grafo possui ciclo
     }
+  }
+
   delete[] cor;
-  delete[] antecessor;
-  return aciclico;
+  return true; // Grafo é acíclico
 }
 
-bool Grafo::visitaDfsCiclo(int u, int *cor, int *antecessor)
+bool Grafo::visitaDfsCiclo(int u, int *cor)
 {
   cor[u] = CINZA;
+
   if (!this->listaAdjVazia(u))
   {
     Aresta *adj = this->primeiroListaAdj(u);
+
     while (adj != NULL)
     {
       int v = adj->_v2();
+
       if (cor[v] == CINZA)
         return true;
-      if (cor[v] == BRANCO)
+
+      if (cor[v] == BRANCO && visitaDfsCiclo(v, cor))
       {
-        antecessor[v] = u;
-        this->visitaDfsCiclo(v, cor, antecessor);
+        delete adj;
+        return true;
       }
+
       delete adj;
-      adj = this->proxAdj(u); // próxima aresta de u
+      adj = this->proxAdj(u);
     }
   }
+
   cor[u] = PRETO;
+  return false;
 }
 
 int Grafo::numComponentes()
