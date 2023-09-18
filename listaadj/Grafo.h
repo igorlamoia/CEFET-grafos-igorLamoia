@@ -392,14 +392,15 @@ void Grafo::buscaEmLargura()
   delete[] antecessor;
 
   // printa distancia
-  // for (int i = 0; i < this->numVertices; i++)
-  //   cout << "Distancia de " << i << ": " << distancia[i] << endl;
+  for (int i = 0; i < this->numVertices; i++)
+    cout << "Distancia de " << i << ": " << distancia[i] << endl;
 }
 
 void Grafo::visitaBfs(int u, int *cor, int *antecessor, int *distancia)
 {
   queue<int> fila;
   cor[u] = CINZA;
+  distancia[u] = 0;
   fila.push(u);
   while (!fila.empty())
   {

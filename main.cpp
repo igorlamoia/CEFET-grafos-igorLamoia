@@ -101,4 +101,7 @@ int main(int argc, char **argv)
 // Euleriano (Grau par em todos os vertices)
 // SubEuleriano (Somente 2 impares) (Grau par em todos os vertices menos 2)
 
+// ordem topologica Para resumir: a ordenação topológica é um conceito que se aplica a grafos direcionados. Se um grafo é não direcionado, esse conceito não se aplica diretamente.
+// No entanto, podemos transformar um grafo não direcionado em um grafo direcionado, adicionando uma aresta direcionada entre cada par de vértices que já estão conectados por uma aresta não direcionada. O grafo resultante é chamado de grafo direcionado de linha. A ordenação topológica pode ser aplicada a este grafo direcionado de linha. A ordem topológica resultante é uma ordem de visitação dos vértices do grafo não direcionado original.
+
 // https://csacademy.com/app/graph_editor/
