@@ -2,7 +2,8 @@
 #include "listaadj/Grafo.h"
 #include <fstream>
 using namespace std;
-
+// link para o grafo
+// https://csacademy.com/app/graph_editor/
 int main(int argc, char **argv)
 {
     // ifstream in("input.txt");
@@ -22,7 +23,17 @@ int main(int argc, char **argv)
         cout << ordem[i] << " ";
     cout << endl;
 
-    grafo->buscaEmLargura();
+    Grafo::ResultadoBusca resultado = grafo->buscaEmLargura();
+    cout << "Caminho mais curto: " << endl;
+    grafo->imprimeCaminho(0, 7, resultado.antecessor);
+    // for (int i = 0; i < grafo->_numVertices(); i++)
+    // {
+    //     cout << "Vertice: " << i << endl;
+    //     cout << "  Distancia: " << resultado.distancia[i] << endl;
+    //     cout << "  Antecessor: " << resultado.antecessor[i] << endl;
+    // }
+    // delete resultado.antecessor;
+    // delete resultado.distancia;
     cout << endl;
 
     // Ex1: criar e imprimir grafo transposto.

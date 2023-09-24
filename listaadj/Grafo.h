@@ -12,6 +12,11 @@ using namespace std;
 class Grafo
 {
 public:
+  struct ResultadoBusca
+  {
+    int *antecessor;
+    int *distancia;
+  };
   class Aresta
   {
   private:
@@ -93,9 +98,9 @@ public:
   vector<int> ordemTopologica();
   void visitaDfsComOrdem(int u, int *cor, int *antecessor, vector<int> &ordem);
   // bfs
-  void buscaEmLargura();
+  ResultadoBusca buscaEmLargura();
   void visitaBfs(int u, int *cor, int *antecessor, int *distancia);
-
+  void imprimeCaminho(int origem, int v, int *antecessor);
   ~Grafo();
   // const para cor
   static const int BRANCO = 0;
@@ -377,7 +382,7 @@ void Grafo::visitaDfsComOrdem(int u, int *cor, int *antecessor, vector<int> &ord
   ordem.push_back(u);
 }
 
-void Grafo::buscaEmLargura()
+Grafo::ResultadoBusca Grafo::buscaEmLargura()
 {
   int *cor = new int[this->numVertices];
   int *antecessor = new int[this->numVertices];
@@ -393,12 +398,18 @@ void Grafo::buscaEmLargura()
   for (int u = 0; u < this->numVertices; u++)
     if (cor[u] == BRANCO)
       this->visitaBfs(u, cor, antecessor, distancia);
-  delete[] cor;
-  delete[] antecessor;
 
   // printa distancia
-  for (int i = 0; i < this->numVertices; i++)
-    cout << "Distancia de " << i << ": " << distancia[i] << endl;
+  // for (int i = 0; i < this->numVertices; i++)
+  //   cout << "Distancia de " << i << ": " << distancia[i] << endl;
+
+  ResultadoBusca resultado;
+  resultado.antecessor = antecessor;
+  resultado.distancia = distancia;
+  delete[] cor;
+  delete[] antecessor;
+  delete[] distancia;
+  return resultado;
 }
 
 void Grafo::visitaBfs(int u, int *cor, int *antecessor, int *distancia)
@@ -420,9 +431,10 @@ void Grafo::visitaBfs(int u, int *cor, int *antecessor, int *distancia)
         if (cor[v] == BRANCO)
         {
           cor[v] = CINZA;
-          cout << "Visitou: " << v << endl;
+          // cout << "Visitou v: " << v << endl;
           antecessor[v] = u;
           distancia[v] = distancia[u] + 1;
+          // cout << "Visitou u: " << u << endl;
           fila.push(v);
         }
         delete adj;
@@ -434,3 +446,16 @@ void Grafo::visitaBfs(int u, int *cor, int *antecessor, int *distancia)
 }
 
 // create a struct to store the edge information
+
+void Grafo::imprimeCaminho(int u, int v, int *antecessor)
+{
+  if (u == v)
+    cout << "Ordem: " << u << " -> ";
+  else if (antecessor[v] == -1)
+    cout << "Nao existe caminho de " << u << " ate " << v << endl;
+  else
+  {
+    imprimeCaminho(u, antecessor[v], antecessor);
+    cout << v << " -> ";
+  }
+}
