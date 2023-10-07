@@ -29,9 +29,9 @@ public:
       this->v2 = v2;
       this->peso = peso;
     }
-    int _peso() { return this->peso; }
-    int _v1() { return this->v1; }
-    int _v2() { return this->v2; }
+    int _peso() const { return this->peso; }
+    int _v1() const { return this->v1; }
+    int _v2() const { return this->v2; }
     ~Aresta() {}
   };
 
@@ -101,6 +101,16 @@ public:
   ResultadoBusca buscaEmLargura();
   void visitaBfs(int u, int *cor, int *antecessor, int *distancia);
   void imprimeCaminho(int origem, int v, int *antecessor);
+  // ordenaArestaPorPeso
+  vector<Grafo::Aresta> ordenaArestaPorPeso();
+  // cria conjunto
+  int *criaConjunto(int n);
+  // kruskal
+  Grafo *kruskal();
+  // encontra o conjunto de um vertice
+  int encontreConjunto(int *conjunto, int v);
+  // une dois conjuntos
+  void unirConjunto(int *conjunto, int v1, int v2);
   ~Grafo();
   // const para cor
   static const int BRANCO = 0;
@@ -458,4 +468,89 @@ void Grafo::imprimeCaminho(int u, int v, int *antecessor)
     imprimeCaminho(u, antecessor[v], antecessor);
     cout << v << " -> ";
   }
+}
+
+// // ordenaArestaPorPeso
+// void ordenaArestaPorPeso();
+
+// Grafo *kruskal();
+
+// int encontreConjunto(int *conjunto, int v);
+// // une dois conjuntos
+// void unirConjunto(int *conjunto, int v1, int v2);
+
+vector<Grafo::Aresta> Grafo::ordenaArestaPorPeso()
+{
+  vector<Grafo::Aresta> arestas;
+  for (int i = 0; i < this->numVertices; i++)
+  {
+    if (!this->listaAdjVazia(i))
+    {
+      Aresta *adj = this->primeiroListaAdj(i);
+      while (adj != NULL)
+      {
+        arestas.push_back(*adj);
+        delete adj;
+        adj = this->proxAdj(i);
+      }
+    }
+  }
+  // ordenar
+  sort(arestas.begin(), arestas.end(), [](const Grafo::Aresta &a, const Grafo::Aresta &b)
+       {
+         // the object has type qualifiers that are not compatible with the member function "Grafo::Aresta::_peso"C/C++(1086)
+         return a._peso() < b._peso(); });
+
+  return arestas;
+}
+
+// cria conjunto
+int *Grafo::criaConjunto(int n)
+{
+  int *conjunto = new int[n];
+  for (int i = 0; i < n; i++)
+  {
+    conjunto[i] = -1;
+  }
+  return conjunto;
+}
+
+// criar conjunto de vertices
+Grafo *Grafo::kruskal()
+{
+  Grafo *grafo = new Grafo(this->numVertices);
+  int *conjunto = Grafo::criaConjunto(this->numVertices);
+  vector<Grafo::Aresta> arestas = Grafo::ordenaArestaPorPeso();
+
+  for (int i = 0; i < arestas.size(); i++)
+  {
+    int u = arestas[i]._v1();
+    int v = arestas[i]._v2();
+    int v1 = encontreConjunto(conjunto, u);
+    int v2 = encontreConjunto(conjunto, v);
+    if (v1 != v2)
+    {
+      grafo->insereAresta(u, v, arestas[i]._peso());
+      grafo->insereAresta(v, u, arestas[i]._peso());
+      unirConjunto(conjunto, v1, v2);
+    }
+  }
+  delete[] conjunto;
+  return grafo;
+}
+
+// encontra o conjunto de um vertice (outro vertice ou ele mesmo)
+int Grafo::encontreConjunto(int *conjunto, int v)
+{
+  if (conjunto[v] == -1)
+    return v;
+  return encontreConjunto(conjunto, conjunto[v]);
+}
+
+// une dois conjuntos
+void Grafo::unirConjunto(int *conjunto, int v1, int v2)
+{
+  int v1_set = encontreConjunto(conjunto, v1);
+  int v2_set = encontreConjunto(conjunto, v2);
+  conjunto[v1_set] = v2_set;
 }

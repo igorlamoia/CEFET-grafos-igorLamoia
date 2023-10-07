@@ -7,25 +7,29 @@ using namespace std;
 int main(int argc, char **argv)
 {
     // ifstream in("input.txt");
-    ifstream in("input-busca-profundidade.txt");
+    // ifstream in("input-busca-profundidade.txt");
+    ifstream in("input-nao-direcionado.txt");
 
     cout << "Grafo: " << endl;
     Grafo *grafo = new Grafo(in);
     grafo->imprime();
-
-    // grafo->buscaEmProfundidade();
-    grafo->aciclico() ? (cout << "Grafo aciclico!") : (cout << "Grafo nao aciclico!");
     cout << endl;
-    cout << "Numero de componentes: " << grafo->numComponentes() << endl;
-    cout << "Ordem topologica: ";
-    vector<int> ordem = grafo->ordemTopologica();
-    for (int i = 0; i < ordem.size(); i++)
-        cout << ordem[i] << " ";
-    cout << endl;
+    Grafo *arvoreKruskal = grafo->kruskal();
+    cout << "Arvore de Kruskal: " << endl;
+    arvoreKruskal->imprime();
+    // // grafo->buscaEmProfundidade();
+    // grafo->aciclico() ? (cout << "Grafo aciclico!") : (cout << "Grafo nao aciclico!");
+    // cout << endl;
+    // cout << "Numero de componentes: " << grafo->numComponentes() << endl;
+    // cout << "Ordem topologica: ";
+    // vector<int> ordem = grafo->ordemTopologica();
+    // for (int i = 0; i < ordem.size(); i++)
+    //     cout << ordem[i] << " ";
+    // cout << endl;
 
-    Grafo::ResultadoBusca resultado = grafo->buscaEmLargura();
-    cout << "Caminho mais curto: " << endl;
-    grafo->imprimeCaminho(0, 7, resultado.antecessor);
+    // Grafo::ResultadoBusca resultado = grafo->buscaEmLargura();
+    // cout << "Caminho mais curto: " << endl;
+    // grafo->imprimeCaminho(0, 7, resultado.antecessor);
     // for (int i = 0; i < grafo->_numVertices(); i++)
     // {
     //     cout << "Vertice: " << i << endl;
