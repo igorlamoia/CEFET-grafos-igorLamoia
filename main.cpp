@@ -8,15 +8,24 @@ int main(int argc, char **argv)
 {
     // ifstream in("input.txt");
     // ifstream in("input-busca-profundidade.txt");
-    ifstream in("input-nao-direcionado.txt");
+    // ifstream in("input-nao-direcionado.txt");
+    ifstream in("input-min.txt");
 
     cout << "Grafo: " << endl;
     Grafo *grafo = new Grafo(in);
     grafo->imprime();
     cout << endl;
-    Grafo *arvoreKruskal = grafo->kruskal();
-    cout << "Arvore de Kruskal: " << endl;
-    arvoreKruskal->imprime();
+    // Grafo *arvoreKruskal = grafo->kruskal();
+    // cout << "Arvore de Kruskal: " << endl;
+    // arvoreKruskal->imprime();
+
+    int *arvorePrim = grafo->prim(0);
+    cout << "Arvore Prim: " << endl;
+    int numVertices = grafo->_numVertices();
+    for (int i = 0; i < numVertices; i++)
+    {
+        cout << arvorePrim[i] << " ";
+    }
     // // grafo->buscaEmProfundidade();
     // grafo->aciclico() ? (cout << "Grafo aciclico!") : (cout << "Grafo nao aciclico!");
     // cout << endl;

@@ -1,11 +1,17 @@
 {
     "files.associations": {
+        ".sequelizerc": "javascript",
+        ".stylelintrc": "json",
+        "*.tsx": "typescriptreact",
+        ".env.*": "dotenv",
+        ".prettierrc": "json",
         "iosfwd": "cpp",
         "iostream": "cpp",
         "ostream": "cpp",
         "new": "cpp",
         "fstream": "cpp",
         "__config": "cpp",
-        "__nullptr": "cpp"
+        "__nullptr": "cpp",
+        "vector": "cpp"
     }
 }
