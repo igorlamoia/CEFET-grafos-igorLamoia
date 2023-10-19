@@ -17,6 +17,12 @@ public:
     int *antecessor;
     int *distancia;
   };
+  struct PrimResult
+  {
+    int *antecessor;
+    double *peso;
+    int numVertices;
+  };
   class Aresta
   {
   private:
@@ -117,7 +123,8 @@ public:
   static const int CINZA = 1;
   static const int PRETO = 2;
   static const int INFINIY = __INT_MAX__;
-  int *prim(int raiz);
+  // int *prim(int raiz);
+  PrimResult prim(int raiz);
 };
 
 Grafo::Grafo(istream &in)
@@ -557,7 +564,8 @@ void Grafo::unirConjunto(int *conjunto, int v1, int v2)
   conjunto[v1_set] = v2_set;
 }
 
-int *Grafo::prim(int raiz)
+// make the new prim function with the the declaration inside Grafo::
+Grafo::PrimResult Grafo::prim(int raiz)
 {
   int n = this->_numVertices();
   int *antecessor = new int[n];
@@ -601,5 +609,66 @@ int *Grafo::prim(int raiz)
     }
   }
 
-  return antecessor;
+  // return antecessor;
+  delete[] itensHeap;
+  delete[] vs;
+  // delete[] peso;
+  PrimResult result;
+  result.antecessor = antecessor;
+  result.peso = peso;
+  result.numVertices = n;
+  return result;
 }
+
+// print return int *antecessor
+// int *Grafo::prim(int raiz)
+// {
+//   int n = this->_numVertices();
+//   int *antecessor = new int[n];
+//   double *peso = new double[n];
+//   int *vs = new int[n + 1];
+//   bool *itensHeap = new bool[n];
+
+//   for (int i = 0; i < n; i++)
+//   {
+//     peso[i] = INFINIY;
+//     antecessor[i] = -1;
+//     itensHeap[i] = true;
+//     vs[i + 1] = i;
+//   }
+
+//   peso[raiz] = 0;
+
+//   FPHeapMinIndireto Q(peso, vs, n);
+//   Q.constroi();
+
+//   while (!Q.vazio())
+//   {
+//     int u = Q.retiraMin();
+//     itensHeap[u] = false;
+//     if (!this->listaAdjVazia(u))
+//     {
+//       Aresta *adj = this->primeiroListaAdj(u);
+//       while (adj != NULL)
+//       {
+//         int v = adj->_v2();
+//         int pesoAresta = adj->_peso();
+
+//         if (itensHeap[v] && pesoAresta < peso[v])
+//         {
+//           antecessor[v] = u;
+//           Q.diminuiChave(v, pesoAresta);
+//         }
+//         delete adj;
+//         adj = this->proxAdj(u); // próxima aresta de u
+//       }
+//     }
+//   }
+
+//   // return antecessor;
+//   delete[] itensHeap;
+//   delete[] vs;
+//   delete[] peso;
+//   return antecessor;
+// }
+// // make the same Prim but returning a struct with peso and antecessor
