@@ -19,18 +19,19 @@ int main(int argc, char **argv)
     // cout << "Arvore de Kruskal: " << endl;
     // arvoreKruskal->imprime();
 
-    Grafo::PrimResult algPrimResult = grafo->prim(0);
-    cout << "Algoritimo Prim: " << endl;
+    // Grafo::PrimResult algResult = grafo->prim(0);
+    Grafo::DijkstraResult algResult = grafo->dijkstra(0);
+    cout << "Algoritimo: " << endl;
     int pesoTotal = 0;
-    for (int i = 0; i < algPrimResult.numVertices; i++)
+    for (int i = 0; i < algResult.numVertices; i++)
     {
         cout << i << " : ";
-        cout << algPrimResult.antecessor[i] << " (" << algPrimResult.peso[i] << ")" << endl;
-        pesoTotal += algPrimResult.peso[i];
+        cout << algResult.antecessor[i] << " (" << algResult.peso[i] << ")" << endl;
+        pesoTotal += algResult.peso[i];
     }
     cout << "Peso total: " << pesoTotal << endl;
-    delete algPrimResult.antecessor;
-    delete algPrimResult.peso;
+    delete algResult.antecessor;
+    delete algResult.peso;
     // // grafo->buscaEmProfundidade();
     // grafo->aciclico() ? (cout << "Grafo aciclico!") : (cout << "Grafo nao aciclico!");
     // cout << endl;
