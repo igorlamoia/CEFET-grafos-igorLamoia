@@ -9,7 +9,8 @@ int main(int argc, char **argv)
     // ifstream in("input.txt");
     // ifstream in("input-busca-profundidade.txt");
     // ifstream in("input-nao-direcionado.txt");
-    ifstream in("input-min.txt");
+    // ifstream in("input-min.txt");
+    ifstream in("dijkstra.txt");
 
     cout << "Grafo: " << endl;
     Grafo *grafo = new Grafo(in);
@@ -29,7 +30,12 @@ int main(int argc, char **argv)
         cout << algResult.antecessor[i] << " (" << algResult.peso[i] << ")" << endl;
         pesoTotal += algResult.peso[i];
     }
-    cout << "Peso total: " << pesoTotal << endl;
+    // cout << "Peso total: " << pesoTotal << endl;
+
+    int inicio = 0, fim = 4;
+    cout << "Caminho mais curto de " << inicio << " a " << fim << ":" << endl;
+    grafo->imprimeCaminho(inicio, fim, algResult.antecessor);
+
     delete algResult.antecessor;
     delete algResult.peso;
     // // grafo->buscaEmProfundidade();
