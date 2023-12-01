@@ -1,5 +1,5 @@
-// #include "matrizadj/Grafo.h"
-#include "listaadj/Grafo.h"
+#include "matrizadj/Grafo.h"
+// #include "listaadj/Grafo.h"
 #include <fstream>
 using namespace std;
 // link para o grafo
@@ -10,34 +10,42 @@ int main(int argc, char **argv)
     // ifstream in("input-busca-profundidade.txt");
     // ifstream in("input-nao-direcionado.txt");
     // ifstream in("input-min.txt");
-    ifstream in("dijkstra.txt");
+    // ifstream in("dijkstra.txt");
+    ifstream in("floyd.txt");
 
     cout << "Grafo: " << endl;
     Grafo *grafo = new Grafo(in);
     grafo->imprime();
     cout << endl;
+    Grafo::FloydWarshall *floyd = grafo->floydWarshall();
+
+    int inicio = 1, fim = 2;
+    cout << "Caminho mais curto de " << inicio << " a " << fim << " usando FloydWarshall:" << endl;
+    grafo->imprimeCaminho(floyd->antecessor, inicio, fim);
+
     // Grafo *arvoreKruskal = grafo->kruskal();
     // cout << "Arvore de Kruskal: " << endl;
     // arvoreKruskal->imprime();
 
     // Grafo::PrimResult algResult = grafo->prim(0);
-    Grafo::DijkstraResult algResult = grafo->dijkstra(0);
-    cout << "Algoritimo: " << endl;
-    int pesoTotal = 0;
-    for (int i = 0; i < algResult.numVertices; i++)
-    {
-        cout << i << " : ";
-        cout << algResult.antecessor[i] << " (" << algResult.peso[i] << ")" << endl;
-        pesoTotal += algResult.peso[i];
-    }
-    // cout << "Peso total: " << pesoTotal << endl;
+    // Grafo::DijkstraResult algResult = grafo->dijkstra(0);
+    // cout << "Algoritimo: " << endl;
+    // int pesoTotal = 0;
+    // for (int i = 0; i < algResult.numVertices; i++)
+    // {
+    //     cout << i << " : ";
+    //     cout << algResult.antecessor[i] << " (" << algResult.peso[i] << ")" << endl;
+    //     pesoTotal += algResult.peso[i];
+    // }
+    // // cout << "Peso total: " << pesoTotal << endl;
 
-    int inicio = 0, fim = 4;
-    cout << "Caminho mais curto de " << inicio << " a " << fim << ":" << endl;
-    grafo->imprimeCaminho(inicio, fim, algResult.antecessor);
+    // int inicio = 0, fim = 4;
+    // cout << "Caminho mais curto de " << inicio << " a " << fim << ":" << endl;
+    // grafo->imprimeCaminho(inicio, fim, algResult.antecessor);
 
-    delete algResult.antecessor;
-    delete algResult.peso;
+    // delete algResult.antecessor;
+    // delete algResult.peso;
+
     // // grafo->buscaEmProfundidade();
     // grafo->aciclico() ? (cout << "Grafo aciclico!") : (cout << "Grafo nao aciclico!");
     // cout << endl;

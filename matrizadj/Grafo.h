@@ -9,6 +9,12 @@ using namespace std;
 class Grafo
 {
 public:
+  struct FloydWarshall
+  {
+    int **antecessor;
+    int **peso;
+    int numVertices;
+  };
   class Aresta
   {
   private:
@@ -47,11 +53,18 @@ public:
   Aresta *proxAdj(int v);
   Aresta *retiraAresta(int v1, int v2);
   void imprime() const;
+  void imprimeCaminho(int **antecessor, int origem, int destino) const;
   int _numVertices() const;
   Grafo *grafoTransposto();
   Grafo *grafoNaoDirecionado();
   void listaAdj(int v);
   bool completo();
+  // const para cor
+  static const int BRANCO = 0;
+  static const int CINZA = 1;
+  static const int PRETO = 2;
+  static const int INFINITY = __INT_MAX__;
+  FloydWarshall *floydWarshall();
   bool regular();
   bool euleriano();
   bool subEuleriano();
@@ -361,4 +374,70 @@ bool Grafo::naoDirecionado()
       return false;
   }
   return true;
+}
+
+Grafo::FloydWarshall *Grafo::floydWarshall()
+{
+  int **d, **antecessor;
+  int numVertices = this->_numVertices();
+  d = new int *[numVertices];
+  antecessor = new int *[numVertices];
+
+  for (int i = 0; i < numVertices; i++)
+  {
+    d[i] = new int[numVertices];
+    antecessor[i] = new int[numVertices];
+  }
+
+  for (int i = 0; i < numVertices; i++)
+    for (int j = 0; j < numVertices; j++)
+    {
+      if (i == j)
+      {
+        d[i][j] = 0;
+        antecessor[i][j] = -1;
+      }
+      else if (this->mat[i][j] != NULL)
+      {
+        d[i][j] = this->mat[i][j];
+        antecessor[i][j] = i;
+      }
+      else
+      {
+        d[i][j] = INFINITY;
+        antecessor[i][j] = -1;
+      }
+    }
+
+  for (int k = 0; k < numVertices; k++)
+    for (int i = 0; i < numVertices; i++)
+      for (int j = 0; j < numVertices; j++)
+        if (d[i][k] != INFINITY && d[k][j] != INFINITY)
+        {
+          if (d[i][k] + d[k][j] < d[i][j])
+          {
+            d[i][j] = d[i][k] + d[k][j];
+            antecessor[i][j] = antecessor[k][j];
+          }
+        }
+
+  FloydWarshall *fw = new FloydWarshall();
+  fw->antecessor = antecessor;
+  fw->peso = d;
+  fw->numVertices = numVertices;
+
+  return fw;
+}
+
+void Grafo::imprimeCaminho(int **antecessor, int origem, int destino) const
+{
+  if (origem == destino)
+    cout << origem << endl;
+  else if (antecessor[origem][destino] == -1)
+    cout << "Nao existe caminho de " << origem << " ate " << destino << endl;
+  else
+  {
+    imprimeCaminho(antecessor, origem, antecessor[origem][destino]);
+    cout << destino << endl;
+  }
 }
